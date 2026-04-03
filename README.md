@@ -2,6 +2,29 @@
 
 A collection of Claude Code skills built by [One Studio](https://one-studio.co).
 
+## Origin
+
+We built a multi-agent system in Claude Code — a command center with 10+ specialized agents, each with their own memory, tools, and domain. It worked well. Then we noticed something: spawning a simple agent just to answer a one-line question cost **~32,000 input tokens**. Every single time.
+
+We traced it. The agent wasn't doing anything special — it just loaded `CLAUDE.md` (~9,600 tokens) + `MEMORY.md` (~2,800 tokens) + its own agent file (~4,900 tokens) + its memory index (~2,000 tokens) before saying a word. Files that had grown organically over months, full of detail that was only occasionally needed.
+
+The fix was obvious in hindsight: the same thing Claude Code already does to its own conversation history — compress. Keep the essential summary always in context, move the raw detail somewhere agents can Read on demand.
+
+We ran a full audit and compression pass across the whole system:
+
+| What | Before | After | Reduction |
+|------|--------|-------|-----------|
+| `CLAUDE.md` | 38,519 bytes | 5,630 bytes | **-85%** |
+| Average agent file | ~10,000 bytes | ~4,800 bytes | **-52%** |
+| Average memory index | ~5,000 bytes | ~1,700 bytes | **-66%** |
+| Heaviest agent spawn | ~15,700 tokens | ~4,700 tokens | **-70%** |
+
+One agent was running on Opus when Sonnet was sufficient — fixing that alone cut its cost **5×** per session.
+
+We turned the process into `/slim` so any Claude Code agent system can run the same pass.
+
+---
+
 ## What are Claude Code skills?
 
 Skills are reusable prompts that extend Claude Code with domain-specific workflows. Drop a skill file into `.claude/commands/` and invoke it with `/skill-name` in any Claude Code session.
