@@ -1,0 +1,3 @@
+[submodule "plugins/collection"]
+	path = plugins/collection
+	url = git@github.com:onestudio-co/collection.git

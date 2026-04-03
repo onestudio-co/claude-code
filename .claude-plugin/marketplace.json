@@ -1,0 +1,23 @@
+{
+    "name": "one-studio",
+    "owner": {
+        "name": "One Studio Co"
+    },
+    "plugins": [
+        {
+            "name": "collection",
+            "source": {
+                "source": "github",
+                "repo": "onestudio-co/collection"
+            },
+            "description": "A collection of Claude Code skills built by One Studio.",
+            "version": "0.0.1",
+            "author": {
+                "name": "One Studio Team"
+            }
+        }
+    ],
+    "metadata": {
+        "version": "0.0.1"
+    }
+}
